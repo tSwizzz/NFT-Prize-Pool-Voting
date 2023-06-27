@@ -1,0 +1,62 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Prize Pool</title>
+
+        <style>
+            .container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                margin-top: 20px;
+            }
+
+            .row {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+            }
+
+            .item {
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                align-items: center;
+                justify-content: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <input type="number" id="token-id" placeholder="Token ID" min="1" />
+            <input
+                type="number"
+                id="buy-in-amount"
+                placeholder="1 Ether to submit NFT"
+                min="0"
+            />
+
+            <button onclick="test()">Submit NFT</button>
+            <br />
+            <input
+                type="number"
+                id="token-id-approve"
+                placeholder="Token ID"
+                min="0"
+            />
+            <button onclick="approveNFT()">Approve NFT</button>
+        </div>
+
+        <script
+            src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"
+            type="application/javascript"
+        ></script>
+        <script type="text/javascript" src="script.js"></script>
+    </body>
+</html>
