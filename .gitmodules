@@ -1,0 +1,3 @@
+[submodule "minty"]
+	path = minty
+	url = https://github.com/yusefnapora/minty.git
