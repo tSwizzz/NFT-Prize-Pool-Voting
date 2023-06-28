@@ -12,7 +12,7 @@ contract PrizePool {
     uint endTime;
 
     bool public beginContest;
-    
+    bool public contestEnded;
 
     //if there is a tie, then all funds are withdrawable to participant
     //if not, then all funds in this mapping are sent to prizePool
@@ -79,6 +79,15 @@ contract PrizePool {
         _;
     }
 
+    modifier canWithdrawNFT() {
+        require(
+            contestEnded,
+            "Please wait until the voting period is over to withdraw your NFT"
+        );
+        require(participants[msg.sender].nftId != 0, "No NFT to withdraw");
+        _;
+    }
+
     function onERC721Received(
         address operator,
         address from,
@@ -104,7 +113,7 @@ contract PrizePool {
         potentialWithdrawBalance[msg.sender] += msg.value;
         allParticipants.push(msg.sender);
 
-        //make this equal to 2 to make testing easier
+        //make this equal to 3 to make testing easier
         if (allParticipants.length == 5) {
             beginContest = true;
             endTime = block.timestamp + 1 days;
@@ -131,6 +140,14 @@ contract PrizePool {
 
         (bool sent, ) = payable(msg.sender).call{value: prizePool}("");
         require(sent, "Withdraw failed, try again please");
+    }
+
+    function withdrawNFT() external canWithdrawNFT {
+        participants[msg.sender].nft.safeTransferFrom(
+            address(this),
+            msg.sender,
+            participants[msg.sender].nftId
+        );
     }
 
     //this basically only exists for the purpose of testing so I don't have to
