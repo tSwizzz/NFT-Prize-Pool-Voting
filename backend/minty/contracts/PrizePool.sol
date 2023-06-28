@@ -104,10 +104,10 @@ contract PrizePool {
         IERC721(nft).safeTransferFrom(msg.sender, address(this), nftId);
 
         //update data for NFT struct
-        NFT storage submitter = participants[msg.sender];
-        submitter.owner = msg.sender;
-        submitter.nftId = nftId;
-        submitter.submitted = true;
+        participants[msg.sender].owner = msg.sender;
+        participants[msg.sender].nft = nft;
+        participants[msg.sender].nftId = nftId;
+        participants[msg.sender].submitted = true;
 
         //update balances and tracking of participants
         potentialWithdrawBalance[msg.sender] += msg.value;
