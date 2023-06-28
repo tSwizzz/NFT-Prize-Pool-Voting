@@ -105,7 +105,7 @@ contract PrizePool {
 
         //update data for NFT struct
         participants[msg.sender].owner = msg.sender;
-        participants[msg.sender].nft = nft;
+        participants[msg.sender].nft = IERC721(nft);
         participants[msg.sender].nftId = nftId;
         participants[msg.sender].submitted = true;
 
