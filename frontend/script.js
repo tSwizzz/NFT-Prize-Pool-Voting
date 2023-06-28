@@ -55,7 +55,8 @@ async function getAccess() {
     );
 }
 
-async function test() {
+let spotsRemaining = 5; //when this reaches 0, we can begin the contest
+async function submit() {
     await getAccess();
     const id = document.getElementById("token-id").value;
     const amount = document.getElementById("buy-in-amount").value;
@@ -69,6 +70,10 @@ async function test() {
             if (error.data) alert(error.data.message);
             else alert(error);
         });
+
+    if ((await nftContract.balanceOf(prizePoolAddress)) == 1) {
+        //begins contest
+    }
 }
 
 async function approveNFT() {
@@ -82,4 +87,33 @@ async function approveNFT() {
             if (error.data) alert(error.data.message);
             else alert(error);
         });
+}
+
+async function displayNFTs() {
+    await getAccess();
+
+    //grab all NFTs inside the smart contract
+    const numNFTs = await nftContract.balanceOf(prizePoolAddress);
+
+    //loop through each NFT and display the image on screen
+    for (let k = 0; k < numNFTs; k++) {
+        return nftContract.tokenByIndex(k).then((nftId) => {
+            nftContract
+                .tokenURI(nftId)
+                .then((uri) => getUrl(uri))
+                .then((link) => fetch(link))
+                .then((data) => data.json())
+                .then((json) => {
+                    const test = document.getElementById("test");
+                    const img = document.createElement("img");
+                    img.src = getUrl(json.image);
+                    img.width = 200;
+                    test.appendChild(img);
+                });
+        });
+    }
+}
+
+function getUrl(ipfs) {
+    return "http://localhost:8080/ipfs" + ipfs.split(":")[1].slice(1);
 }
