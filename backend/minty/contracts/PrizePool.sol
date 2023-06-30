@@ -188,7 +188,7 @@ contract PrizePool {
         for (uint k; k < allParticipants.length; k++) {
             if (participants[allParticipants[k]].numOfVotes > highestVotes) {
                 winner = allParticipants[k];
-                highestVotes = participants[allParticipants[k].numOfVotes];
+                highestVotes = participants[allParticipants[k]].numOfVotes;
             } else if (
                 participants[allParticipants[k]].numOfVotes == highestVotes
             ) {
