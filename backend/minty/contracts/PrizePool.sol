@@ -13,7 +13,6 @@ contract PrizePool {
 
     bool public beginContest;
     bool public contestEnded;
-    bool possibleTie;
 
     //if there is a tie, then all funds are withdrawable to participant
     //if not, then all funds in this mapping are sent to prizePool
@@ -146,7 +145,6 @@ contract PrizePool {
 
     function withdrawPrizePool() external {
         require(msg.sender == winner, "You are not the winner");
-        require(!possibleTie, "This contest did not have a winner");
 
         (bool sent, ) = payable(winner).call{value: prizePool}("");
         require(sent, "Withdraw failed, try again please");
@@ -155,7 +153,11 @@ contract PrizePool {
     //this is only callable if there was a tie. all submitters can withdraw their funds
     function withdrawAllFunds() external {
         require(
-            possibleTie,
+            contestEnded,
+            "Please wait until the voting period is over to withdraw your funds"
+        );
+        require(
+            winner == address(0),
             "You cannot withdraw your funds because the contest had a winner"
         );
         require(
@@ -180,21 +182,21 @@ contract PrizePool {
     //this basically only exists for the purpose of testing so I don't have to
     //wait for the contest to end every time it starts lol
     function end() external onlyOwner {
-        //lets check if there is a winner or of there is a tie!
-        uint highestVotes;
+        //lets check if there is a winner or if there is a tie
+        uint highestVotes = participants[allParticipants[0]].numOfVotes;
+
         for (uint k; k < allParticipants.length; k++) {
             if (participants[allParticipants[k]].numOfVotes > highestVotes) {
                 winner = allParticipants[k];
-                possibleTie = false;
             } else if (
                 participants[allParticipants[k]].numOfVotes == highestVotes
             ) {
-                possibleTie = true;
+                winner = address(0);
             }
         }
 
         //if winner exists, send funds to prizePool
-        if (!possibleTie) {
+        if (winner != address(0)) {
             uint amount;
 
             for (uint k; k < allParticipants.length; k++) {
