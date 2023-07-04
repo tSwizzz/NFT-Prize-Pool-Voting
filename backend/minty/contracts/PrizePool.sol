@@ -4,7 +4,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 
 contract PrizePool {
-    address owner;
+    address public owner;
     address winner;
     address[] public allParticipants;
 
