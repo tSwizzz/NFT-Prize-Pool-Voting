@@ -32,12 +32,16 @@ let nftContract = null;
 
 const prizePoolAbi = [
     "constructor()",
+    "function allParticipants(uint256) view returns (address)",
     "function beginContest() view returns (bool)",
+    "function contestEnded() view returns (bool)",
     "function end()",
     "function onERC721Received(address operator, address from, uint256 tokenId, bytes data) returns (bytes4)",
     "function submitNFT(address nft, uint256 nftId) payable",
     "function vote() payable",
+    "function withdrawAllFunds()",
     "function withdrawLockedEther()",
+    "function withdrawNFT()",
     "function withdrawPrizePool()",
 ];
 const prizePoolAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
