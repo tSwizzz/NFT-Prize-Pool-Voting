@@ -11,8 +11,8 @@ contract PrizePool {
     uint prizePool;
     uint endTime;
 
-    bool public beginContest;
-    bool public contestEnded;
+    bool beginContest;
+    bool contestEnded;
 
     //if there is a tie, then all funds are withdrawable to participant
     //if not, then all funds in this mapping are sent to prizePool
@@ -204,6 +204,14 @@ contract PrizePool {
                 prizePool += potentialWithdrawBalance[allParticipants[k]];
             }
         }
+    }
+
+    function beginContestValue() public view returns (bool) {
+        return beginContest;
+    }
+
+    function contestEndedValue() public view returns (bool) {
+        return contestEnded;
     }
 }
 
