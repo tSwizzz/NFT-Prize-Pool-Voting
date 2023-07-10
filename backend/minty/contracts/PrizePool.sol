@@ -146,7 +146,10 @@ contract PrizePool {
     function withdrawPrizePool() external {
         require(msg.sender == winner, "You are not the winner");
 
-        (bool sent, ) = payable(winner).call{value: prizePool}("");
+        uint amount = prizePool;
+        prizePool = 0;
+
+        (bool sent, ) = payable(winner).call{value: amount}("");
         require(sent, "Withdraw failed, try again please");
     }
 
@@ -198,10 +201,9 @@ contract PrizePool {
 
         //if winner exists, send funds to prizePool
         if (winner != address(0)) {
-            uint amount;
-
             for (uint k; k < allParticipants.length; k++) {
                 prizePool += potentialWithdrawBalance[allParticipants[k]];
+                potentialWithdrawBalance[allParticipants[k]] = 0;
             }
         }
     }
