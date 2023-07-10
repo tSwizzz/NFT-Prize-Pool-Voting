@@ -1,37 +1,33 @@
 /** @format */
+import Submit from "./Submit.js";
+import Votes from "./Votes.js";
 import { useState, useEffect } from "react";
-import { connect, getContract } from "./contract";
+import { connect, getContract } from "./contract.js";
 
 function App() {
     const [contract, setContract] = useState(null);
-    const [connected, setConnected] = useState(false);
+    const [beginContest, setBeginContest] = useState(false);
 
+    //checks to see if contest started or not.
+    //if beginContest = false, then the Submit component is rendered.
+    //if beginContest = true, then the Votes component is rendered.
     useEffect(() => {
-        window.ethereum.request({ method: "eth_accounts" }).then((accounts) => {
-            if (accounts.length > 0) {
-                handleInit();
-            } else setConnected(false);
-        });
-    }, []);
-
-    const handleInit = async () => {
-        setConnected(true);
-        getContract().then(({ contract, signer }) => {
+        getContract().then(({ contract }) => {
             setContract(contract);
-
             if (contract) {
-                signer.getAddress().then((address) => {
-                    contract.owner().then((ownerAddr) => {
-                        if (address == ownerAddr) {
-                            console.log("test");
-                        }
-                    });
+                contract.beginContestValue().then((value) => {
+                    setBeginContest(value);
                 });
             }
         });
-    };
+    }, []);
 
-    return <div>wow</div>;
+    return (
+        <>
+            <div>hi</div>
+            <div>{!beginContest ? <Submit /> : <Votes />}</div>
+        </>
+    );
 }
 
 export default App;

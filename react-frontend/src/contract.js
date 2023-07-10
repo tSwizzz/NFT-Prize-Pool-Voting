@@ -2,12 +2,14 @@
 
 import { ethers } from "ethers";
 
-const prizePoolAddress = "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9";
+const prizePoolAddress = "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512";
 const prizePoolAbi = [
     "constructor()",
     "function allParticipants(uint256) view returns (address)",
     "function beginContest() view returns (bool)",
+    "function beginContestValue() view returns (bool)",
     "function contestEnded() view returns (bool)",
+    "function contestEndedValue() view returns (bool)",
     "function end()",
     "function onERC721Received(address operator, address from, uint256 tokenId, bytes data) returns (bytes4)",
     "function owner() view returns (address)",
